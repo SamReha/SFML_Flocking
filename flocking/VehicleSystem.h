@@ -40,7 +40,15 @@ private:
     void removeVertexTri();
 
 public:
+    bool separationEnabled = true;
+    bool cohesionEnabled = true;
+    bool alignmentEnabled = true;
+
     VehicleSystem(unsigned int count, float minSpeed, float maxSpeed);
+
+    void toggleSeparation() { separationEnabled = !separationEnabled; };
+    void toggleCohesion() { cohesionEnabled = !cohesionEnabled; };
+    void toggleAlignment() { alignmentEnabled = !alignmentEnabled; };
 
     void setGravity(float newGravity);
     void setMinSpeed(float newSpeed);

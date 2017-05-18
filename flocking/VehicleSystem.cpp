@@ -56,8 +56,8 @@ void VehicleSystem::updateFlockForces(int vehicleIndex, float deltaTime) {
     int alignCount = 0;
     int cohesionCount = 0;
 
-    float sepWeight = 1.0;
-    float alignWeight = 1.0;
+    float sepWeight = 10.0;
+    float alignWeight = 10.0;
     float cohesionWeight = 1.0;
 
     for (unsigned int i = 0; i < vehicles.size(); i++) {
@@ -89,7 +89,7 @@ void VehicleSystem::updateFlockForces(int vehicleIndex, float deltaTime) {
     }
 
     // If there are any forces, compute the average force and apply it to our vehicle
-    if (sepCount > 0) {
+    if (sepCount > 0 && separationEnabled) {
         sepSum /= (float)sepCount;
 
         // Apply weight
@@ -101,10 +101,10 @@ void VehicleSystem::updateFlockForces(int vehicleIndex, float deltaTime) {
         // Compute steering force (desired speed - current speed) and apply it to the vehicle
         sf::Vector2f steer = sepSum - vehicles[vehicleIndex].velocity;
         steer = limit(steer, m_maxForce);
-        vehicles[vehicleIndex].acceleration += steer*deltaTime;
+        vehicles[vehicleIndex].acceleration += steer*deltaTime*sepWeight;
     }
 
-    if (alignCount > 0) {
+    if (alignCount > 0 && alignmentEnabled) {
         alignSum /= (float)alignCount;
 
         // Apply weight
@@ -116,10 +116,10 @@ void VehicleSystem::updateFlockForces(int vehicleIndex, float deltaTime) {
         // Compute steering force (desired speed - current speed) and apply it to the vehicle
         sf::Vector2f steer = alignSum - vehicles[vehicleIndex].velocity;
         steer = limit(steer, m_maxForce);
-        vehicles[vehicleIndex].acceleration += steer*deltaTime;
+        vehicles[vehicleIndex].acceleration += steer*deltaTime*alignWeight;
     }
 
-    if (cohesionCount > 0) {
+    if (cohesionCount > 0 && cohesionEnabled) {
         // Compute average neighbor position
         cohesionSum /= (float)cohesionCount;
 
@@ -151,9 +151,9 @@ VehicleSystem::VehicleSystem(unsigned int count, float minSpeed, float maxSpeed)
     vehicles(count),
     m_vertices(sf::Triangles),
     m_gravity(0),
-    m_maxForce(0.2),
-    separationRad(32),
-    flockingRad(150) {
+    m_maxForce(0.5),
+    separationRad(100),
+    flockingRad(300) {
     m_color = sf::Color::White;
     m_minSpeed = minSpeed;
     m_maxSpeed = maxSpeed;

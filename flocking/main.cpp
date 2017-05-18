@@ -39,6 +39,18 @@ int main() {
     fpsText.setColor(sf::Color::White);
     fpsText.setPosition(0, SCREENHEIGHT - 30);
 
+    sf::Text sepText("Separation Enabled", font, 25);
+    sepText.setColor(sf::Color::White);
+    sepText.setPosition(0, SCREENHEIGHT - 60);
+
+    sf::Text aliText("Alignment Enabled", font, 25);
+    aliText.setColor(sf::Color::White);
+    aliText.setPosition(0, SCREENHEIGHT - 90);
+
+    sf::Text cohText("Cohesion Enabled", font, 25);
+    cohText.setColor(sf::Color::White);
+    cohText.setPosition(0, SCREENHEIGHT - 120);
+
     // create a clock to track the elapsed time
     sf::Clock clock;
 
@@ -58,6 +70,12 @@ int main() {
                     activeSystem.addVehicle();
                 } else if (event.key.code == sf::Keyboard::S) {
                     activeSystem.removeVehicle();
+                } else if (event.key.code == sf::Keyboard::Z) {
+                    activeSystem.toggleSeparation();
+                } else if (event.key.code == sf::Keyboard::X) {
+                    activeSystem.toggleAlignment();
+                } else if (event.key.code == sf::Keyboard::C) {
+                    activeSystem.toggleCohesion();
                 }
             }
         }
@@ -70,6 +88,18 @@ int main() {
         particlesCount.setString(std::to_string(activeSystem.count()) + " particles");
         fpsText.setString(std::to_string((int)(1/elapsed.asSeconds())) + " fps");
 
+        if (activeSystem.separationEnabled) {
+            sepText.setString("Separation Enabled");
+        } else sepText.setString("Separation Disabled");
+
+        if (activeSystem.alignmentEnabled) {
+            aliText.setString("Alignment Enabled");
+        } else aliText.setString("Alignment Disabled");
+
+        if (activeSystem.cohesionEnabled) {
+            cohText.setString("Cohesion Enabled");
+        } else cohText.setString("Cohesion Disabled");
+
         // draw it
         window.clear();
         window.draw(activeSystem);
@@ -77,6 +107,9 @@ int main() {
         window.draw(increaseParticlesText);
         window.draw(changeSystemText);
         window.draw(fpsText);
+        window.draw(sepText);
+        window.draw(aliText);
+        window.draw(cohText);
         window.display();
     }
 
