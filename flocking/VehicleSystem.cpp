@@ -37,10 +37,9 @@ void VehicleSystem::setVehiclePosition(int vehicleIndex, sf::Vector2f newPositio
     m_vertices[triIndex + 2].position += delta;
 }
 
-void VehicleSystem::applyRotation(int vehicleIndex, sf::Vector2f oldVelocity) {
+void VehicleSystem::applyRotation(int vehicleIndex) {
     // Compute delta
     int triIndex = vehicleIndex * 3;
-   // sf::Vector2f delta = vehicles[vehicleIndex].velocity - oldVelocity;
 
     // Rotate the vehicle
     float rotation = atan2f(vehicles[vehicleIndex].velocity.y, vehicles[vehicleIndex].velocity.x);
@@ -247,13 +246,12 @@ void VehicleSystem::update(sf::Time elapsed) {
         updateFlockForces(i, elapsed.asSeconds());
 
         // Update velocity
-        sf::Vector2f oldVelocity = p.velocity;
         p.velocity += p.acceleration;
 
         // update the position of the corresponding tri
         sf::Vector2f newPosition = m_vertices[triIndex].position + p.velocity * elapsed.asSeconds();
         setVehiclePosition(i, newPosition);
-        applyRotation(i, oldVelocity);
+        applyRotation(i);
 
         // Reset acceleration
         p.acceleration.x = 0; p.acceleration.y = 0;

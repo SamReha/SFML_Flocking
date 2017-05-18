@@ -34,7 +34,7 @@ private:
 
     void seekPoint(int vehicleIndex, sf::Vector2f target, float deltaTime);
     void setVehiclePosition(int vehicleIndex, sf::Vector2f newPosition);
-    void applyRotation(int vehicleIndex, sf::Vector2f oldPosition);
+    void applyRotation(int vehicleIndex);
     void updateFlockForces(int vehicleIndex, float deltaTime);
     void addVertexTri();
     void removeVertexTri();
